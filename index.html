@@ -270,11 +270,11 @@
     <!-- Hero -->
     <section id="home">
         <div class="hero-content">
-            <h1 class="hero-title">Đáo Hạn & Rút Tiền Thẻ Tín Dụng TP.HCM</h1>
+            <h1 class="hero-title">Đáo Hạn & Rút Tiền Thẻ Tín Dụng</h1>
             <p class="hero-subtitle">An Toàn - Nhanh Chóng - Uy Tín</p>
             <p class="hero-subtitle">Có hỗ trợ đáo hạn cho thẻ tín dụng VPBank & Sacombank.</p>
             <p class="hero-desc">
-                Phí chỉ từ <strong>1.2%</strong> • Hỗ trợ 24/7 tại TP.HCM.<br>
+                Phí chỉ từ <strong>1.2%</strong> • Hỗ trợ 24/7<br>
                 Giao dịch tại chỗ hoặc online • Hơn <strong>1000+</strong> khách hàng tin dùng
             </p>
             <a href="tel:0776630598" class="hero-btn">Gọi ngay 0776.63.0598</a>
@@ -627,5 +627,57 @@
         <a href="mailto:retm247tphcm@gmail.com" style="color: #4da6ff; text-decoration: none;">Liên hệ</a>
     </p>
 </footer>
+<script>
+    // ====== CẤU HÌNH TELEGRAM ======
+    const TELEGRAM_BOT_TOKEN = "8583034044:AAE6JKaHLLSnVszyWwknkfELrPgJSi2eUNs";
+    const TELEGRAM_CHAT_ID = "-5299961173";
+
+    const form = document.getElementById("contactForm");
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        const dichVu = formData.get("Dịch vụ");
+        const nganHang = formData.get("Ngân hàng");
+        const soTien = formData.get("Số tiền") || "Không nhập";
+        const sdt = formData.get("SĐT");
+
+        const message = `
+        📩 *YÊU CẦU TƯ VẤN MỚI*
+        ━━━━━━━━━━━━━━
+        📌 Dịch vụ: ${dichVu}
+        🏦 Ngân hàng: ${nganHang}
+        💰 Số tiền: ${soTien}
+        📞 SĐT: ${sdt}
+        ⏰ Thời gian: ${new Date().toLocaleString("vi-VN")}
+        `;
+
+        fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: "Markdown"
+            })
+        })
+        .then(res => {
+            if (res.ok) {
+                alert("✅ Đã gửi yêu cầu thành công! Chúng tôi sẽ liên hệ sớm.");
+                form.reset();
+            } else {
+                alert("❌ Gửi thất bại. Vui lòng thử lại!");
+            }
+        })
+        .catch(err => {
+            alert("⚠️ Lỗi kết nối Telegram");
+            console.error(err);
+        });
+    });
+</script>
 </body>
 </html>
